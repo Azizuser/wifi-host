@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>WiFi Glass Portal</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#050505;
+}
+
+
+/* AURORA */
+
+.aurora{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+}
+
+.aurora span{
+    position:absolute;
+    width:500px;
+    height:500px;
+    border-radius:50%;
+    filter:blur(120px);
+    animation:move 15s infinite alternate;
+}
+
+.aurora span:nth-child(1){
+    background:#ffffff;
+    top:-200px;
+    left:-200px;
+}
+
+.aurora span:nth-child(2){
+    background:#555;
+    right:-200px;
+    top:200px;
+    animation-delay:3s;
+}
+
+.aurora span:nth-child(3){
+    background:#222;
+    bottom:-200px;
+    left:40%;
+    animation-delay:5s;
+}
+
+
+@keyframes move{
+
+from{
+transform:translate(0,0);
+}
+
+to{
+transform:translate(150px,100px);
+}
+
+}
+
+
+
+/* GLASS CARD */
+
+.card{
+
+width:360px;
+padding:40px;
+border-radius:30px;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(25px);
+
+border:1px solid rgba(255,255,255,.15);
+
+box-shadow:
+0 30px 80px rgba(0,0,0,.8);
+
+transition:.15s;
+
+color:white;
+
+position:relative;
+
+}
+
+
+
+.logo{
+
+font-size:60px;
+text-align:center;
+
+}
+
+
+h2{
+
+text-align:center;
+margin:15px 0;
+
+}
+
+
+p{
+
+text-align:center;
+color:#aaa;
+margin-bottom:25px;
+
+}
+
+
+input{
+
+width:100%;
+padding:15px;
+
+border-radius:15px;
+
+border:none;
+outline:none;
+
+background:rgba(255,255,255,.1);
+
+color:white;
+
+font-size:15px;
+
+margin-bottom:20px;
+
+}
+
+
+
+button{
+
+width:100%;
+padding:15px;
+
+border:none;
+
+border-radius:15px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+background:white;
+
+color:#111;
+
+transition:.3s;
+
+box-shadow:
+0 0 20px white;
+
+}
+
+
+
+button:hover{
+
+transform:translateY(-5px);
+
+box-shadow:
+0 0 40px white;
+
+}
+
+
+
+/* ERROR */
+
+#error{
+
+text-align:center;
+
+color:#ff7777;
+
+font-size:14px;
+
+margin-bottom:15px;
+
+display:none;
+
+}
+
+
+
+</style>
+
+</head>
+
+<body>
+
+
+<div class="aurora">
+
+<span></span>
+<span></span>
+<span></span>
+
+</div>
+
+
+<div class="card">
+
+
+<div class="logo">
+📶
+</div>
+
+
+<h2>
+Portal WiFi host
+</h2>
+
+
+<p>
+Masukkan password WiFi
+</p>
+
+
+
+<form id="login">
+
+
+<input 
+type="password"
+id="pass"
+placeholder="Password WiFi">
+
+
+
+<div id="error">
+Password salah!
+</div>
+
+
+
+<button>
+LOGIN
+</button>
+
+
+</form>
+
+
+</div>
+
+
+
+<script>
+
+
+// PASSWORD WIFI
+
+const passwordWiFi="12345678";
+
+
+
+document.getElementById("login")
+.addEventListener("submit",function(e){
+
+
+e.preventDefault();
+
+
+let pass=document.getElementById("pass").value;
+
+
+if(pass===passwordWiFi){
+
+
+document.querySelector("button").innerHTML=
+"Menghubungkan...";
+
+
+setTimeout(()=>{
+
+window.location.href = "https://azizuser.github.io/local-preview";
+
+},1500);
+
+
+}else{
+
+
+let error=document.getElementById("error");
+
+error.style.display="block";
+
+
+document.getElementById("pass").value="";
+
+
+}
+
+
+
+});
+
+
+
+
+// 3D MACOS EFFECT
+
+
+const card=document.querySelector(".card");
+
+
+document.addEventListener("mousemove",function(e){
+
+
+let x=(window.innerWidth/2-e.clientX)/30;
+
+let y=(window.innerHeight/2-e.clientY)/30;
+
+
+card.style.transform=
+`
+perspective(900px)
+rotateX(${y}deg)
+rotateY(${x}deg)
+`;
+
+
+
+});
+
+
+
+document.addEventListener("mouseleave",()=>{
+
+
+card.style.transform=
+"rotateX(0) rotateY(0)";
+
+
+});
+
+
+
+<script>
+function login(e){
+    e.preventDefault();
+
+    const password = document.getElementById("password").value.trim();
+
+    if (password === "local123") {
+        // Pindah ke website
+        window.location.href = "https://azizuser.github.io/local-preview/";
+    } else {
+        alert("Password salah!");
+    }
+  
+
+
+</body>
+</html>
