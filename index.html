@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>WiFi Glass Portal</title>
+<title>WiFi Host Portal</title>
 
 <style>
 
@@ -187,6 +187,7 @@ box-shadow:
 }
 
 
+
 /* ERROR */
 
 #error{
@@ -296,9 +297,10 @@ document.querySelector("button").innerHTML=
 
 setTimeout(()=>{
 
-window.location.href = "https://azizuser.github.io/local-preview";
+window.location="https://azizuser.github.io/local-preview";
 
 },1500);
+
 
 
 }else{
@@ -359,19 +361,7 @@ card.style.transform=
 
 
 
-<script>
-function login(e){
-    e.preventDefault();
-
-    const password = document.getElementById("password").value.trim();
-
-    if (password === "local123") {
-        // Pindah ke website
-        window.location.href = "https://azizuser.github.io/local-preview";
-    } else {
-        alert("Password salah!");
-    }
-  
+</script>
 
 
 </body>
