@@ -1,368 +1,459 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>WiFi Host Portal</title>
-
-<style>
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
-
-body{
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:#050505;
-}
-
-
-/* AURORA */
-
-.aurora{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-}
-
-.aurora span{
-    position:absolute;
-    width:500px;
-    height:500px;
-    border-radius:50%;
-    filter:blur(120px);
-    animation:move 15s infinite alternate;
-}
-
-.aurora span:nth-child(1){
-    background:#ffffff;
-    top:-200px;
-    left:-200px;
-}
-
-.aurora span:nth-child(2){
-    background:#555;
-    right:-200px;
-    top:200px;
-    animation-delay:3s;
-}
-
-.aurora span:nth-child(3){
-    background:#222;
-    bottom:-200px;
-    left:40%;
-    animation-delay:5s;
-}
-
-
-@keyframes move{
-
-from{
-transform:translate(0,0);
-}
-
-to{
-transform:translate(150px,100px);
-}
-
-}
-
-
-
-/* GLASS CARD */
-
-.card{
-
-width:360px;
-padding:40px;
-border-radius:30px;
-
-background:rgba(255,255,255,.08);
-
-backdrop-filter:blur(25px);
-
-border:1px solid rgba(255,255,255,.15);
-
-box-shadow:
-0 30px 80px rgba(0,0,0,.8);
-
-transition:.15s;
-
-color:white;
-
-position:relative;
-
-}
-
-
-
-.logo{
-
-font-size:60px;
-text-align:center;
-
-}
-
-
-h2{
-
-text-align:center;
-margin:15px 0;
-
-}
-
-
-p{
-
-text-align:center;
-color:#aaa;
-margin-bottom:25px;
-
-}
-
-
-input{
-
-width:100%;
-padding:15px;
-
-border-radius:15px;
-
-border:none;
-outline:none;
-
-background:rgba(255,255,255,.1);
-
-color:white;
-
-font-size:15px;
-
-margin-bottom:20px;
-
-}
-
-
-
-button{
-
-width:100%;
-padding:15px;
-
-border:none;
-
-border-radius:15px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-background:white;
-
-color:#111;
-
-transition:.3s;
-
-box-shadow:
-0 0 20px white;
-
-}
-
-
-
-button:hover{
-
-transform:translateY(-5px);
-
-box-shadow:
-0 0 40px white;
-
-}
-
-
-
-/* ERROR */
-
-#error{
-
-text-align:center;
-
-color:#ff7777;
-
-font-size:14px;
-
-margin-bottom:15px;
-
-display:none;
-
-}
-
-
-
-</style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monochrome Glass Portal</title>
+  <!-- QR Code Library CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; }
+
+    body {
+      background: #0a0a0c;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.05) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(160, 160, 160, 0.04) 0px, transparent 50%);
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Card Glassmorphism Monokrom */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2);
+      text-align: center;
+      position: relative;
+    }
+
+    /* Tombol Lingkaran Sinyal Monokrom (Pojok Kiri Atas) */
+    .btn-signal-admin {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .btn-signal-admin:hover {
+      transform: scale(1.1);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.4);
+    }
+
+    .btn-signal-admin svg {
+      width: 20px;
+      height: 20px;
+      fill: #ffffff;
+      filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.6));
+    }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    p.subtitle {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 22px;
+    }
+
+    .config-group { margin-bottom: 14px; text-align: left; }
+    .config-group label {
+      font-size: 0.72rem;
+      color: #cbd5e1;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-weight: 600;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .input-wrapper { display: flex; gap: 8px; }
+
+    input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      outline: none;
+      font-size: 0.88rem;
+      transition: all 0.3s ease;
+    }
+
+    input[readonly] {
+      background: rgba(255, 255, 255, 0.02);
+      color: #94a3b8;
+      border-color: rgba(255, 255, 255, 0.05);
+      cursor: not-allowed;
+    }
+
+    input:focus:not([readonly]) {
+      border-color: #ffffff;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+    }
+
+    .wifi-config {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 16px;
+      border-radius: 16px;
+      margin-bottom: 18px;
+      text-align: left;
+    }
+
+    .qr-container {
+      background: #ffffff;
+      padding: 14px;
+      border-radius: 18px;
+      display: inline-block;
+      margin: 10px 0 6px 0;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+    }
+    #qrcode img { margin: 0 auto; }
+
+    .btn-copy {
+      background: #e2e8f0;
+      color: #0f172a;
+      border: none;
+      padding: 0 16px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .btn-copy:hover {
+      background: #ffffff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Tombol Utama Monokrom */
+    .btn-login {
+      background: linear-gradient(135deg, #ffffff, #cbd5e1);
+      color: #090a0f;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+    }
+    .btn-login:hover {
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f1f5f9;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* Modal Monokrom Overlay */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-card {
+      background: #121318;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 24px;
+      width: 100%;
+      max-width: 350px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .btn-cancel {
+      background: rgba(255,255,255,0.05);
+      color: #64748b;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      width: 100%;
+      margin-top: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .btn-cancel:hover {
+      color: #94a3b8;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .hidden { display: none !important; }
+  </style>
 </head>
-
 <body>
 
+<div class="glass-card">
 
-<div class="aurora">
+  <!-- ================= HALAMAN 1: LOGIN ================= -->
+  <div id="page-login">
+    <!-- Tombol Sinyal Admin (Monokrom Glow) -->
+    <button class="btn-signal-admin" onclick="openAdminAuthModal()" title="Pengaturan Admin Wi-Fi">
+      <svg viewBox="0 0 24 24">
+        <path d="M12 3C7.03 3 2.73 5.11 0 8.42L12 21 24 8.42C21.27 5.11 16.97 3 12 3zm0 4.5c3.27 0 6.22 1.25 8.42 3.29L12 19.33 3.58 10.79C5.78 8.75 8.73 7.5 12 7.5z"/>
+      </svg>
+    </button>
 
-<span></span>
-<span></span>
-<span></span>
+    <h2 style="margin-top: 15px;">🔑 Access Code</h2>
+    <p class="subtitle">Masukkan password untuk membuka akses Wi-Fi</p>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="config-group">
+        <label for="password">Password Access</label>
+        <input type="password" id="password" placeholder="Masukkan password" required>
+      </div>
+      <button type="submit" class="btn btn-login">MASUK (ENKRIPSI SHA-256)</button>
+    </form>
+  </div>
+
+
+  <!-- ================= HALAMAN 2: DASHBOARD WI-FI ================= -->
+  <div id="page-wifi" class="hidden">
+    <h2>⚡ Akses Informasi Wi-Fi</h2>
+    <p class="subtitle">Pindai QR atau salin password di bawah ini</p>
+
+    <div class="wifi-config">
+      <div class="config-group">
+        <label for="wifi-ssid">Nama Wi-Fi (SSID)</label>
+        <input type="text" id="wifi-ssid" readonly>
+      </div>
+      <div class="config-group" style="margin-bottom: 0;">
+        <label for="wifi-pass">Password Wi-Fi</label>
+        <div class="input-wrapper">
+          <input type="text" id="wifi-pass" readonly>
+          <button class="btn-copy" onclick="copyPassword()">Salin</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-container">
+      <div id="qrcode"></div>
+    </div>
+    <p style="font-size: 0.73rem; color: #64748b; margin-top: 6px; margin-bottom: 12px;">
+      Scan QR code dengan HP untuk langsung terkoneksi
+    </p>
+
+    <button onclick="handleLogout()" class="btn btn-logout">Keluar Halaman Ini</button>
+  </div>
 
 </div>
 
 
-<div class="card">
-
-
-<div class="logo">
-📶
+<!-- ================= MODAL AUTH ADMIN ================= -->
+<div id="modal-admin-auth" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h3 style="color: #ffffff; margin-bottom: 8px;">⚙️ Verifikasi Admin</h3>
+    <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 16px;">Masukkan Password Admin untuk membuka panel pengaturan</p>
+    
+    <div class="config-group">
+      <label for="admin-pass">Password Admin</label>
+      <input type="password" id="admin-pass" placeholder="Password admin">
+    </div>
+    
+    <button onclick="verifyAdminPassword()" class="btn btn-login">VERIFIKASI</button>
+    <button onclick="closeModal('modal-admin-auth')" class="btn-cancel">Batal</button>
+  </div>
 </div>
 
 
-<h2>
-Portal WiFi host
-</h2>
-
-
-<p>
-Masukkan password WiFi
-</p>
-
-
-
-<form id="login">
-
-
-<input 
-type="password"
-id="pass"
-placeholder="Password WiFi">
-
-
-
-<div id="error">
-Password salah!
+<!-- ================= MODAL CONFIG WI-FI ================= -->
+<div id="modal-admin-config" class="modal-overlay hidden">
+  <div class="modal-card">
+    <h3 style="color: #ffffff; margin-bottom: 8px;">📶 Edit Wi-Fi Realtime</h3>
+    <p style="font-size: 0.78rem; color: #64748b; margin-bottom: 16px;">Ubah SSID dan Password Wi-Fi utama</p>
+    
+    <div class="config-group">
+      <label for="edit-ssid">SSID Baru</label>
+      <input type="text" id="edit-ssid">
+    </div>
+    <div class="config-group">
+      <label for="edit-pass">Password Wi-Fi Baru</label>
+      <input type="text" id="edit-pass">
+    </div>
+    
+    <button onclick="saveWifiConfig()" class="btn btn-login">SIMPAN PERUBAHAN</button>
+    <button onclick="closeModal('modal-admin-config')" class="btn-cancel">Batal</button>
+  </div>
 </div>
-
-
-
-<button>
-LOGIN
-</button>
-
-
-</form>
-
-
-</div>
-
 
 
 <script>
+  // DEFAULT WI-FI CONFIG
+  let DEFAULT_SSID = "WIFI_MONO_GLASS";
+  let DEFAULT_PASS = "kopi1234";
 
+  // HASH LOGIN USER BARU (0abea6ba7e8d8edb931b17c7add249429d95232502416ec48201f1b0f61ed23c)
+  const USER_HASH_TARGET = "0abea6ba7e8d8edb931b17c7add249429d95232502416ec48201f1b0f61ed23c";
 
-// PASSWORD WIFI
+  // HASH ADMIN (Tetap sama: 2d7532e279254ca6bf0cd7954e1baf659975803338dfbc9d31058d5e8009f7ea)
+  const ADMIN_HASH_TARGET = "2d7532e279254ca6bf0cd7954e1baf659975803338dfbc9d31058d5e8009f7ea";
 
-const passwordWiFi="12345678";
+  // DOM Elements
+  const pageLogin = document.getElementById("page-login");
+  const pageWifi = document.getElementById("page-wifi");
+  const ssidInput = document.getElementById("wifi-ssid");
+  const passInput = document.getElementById("wifi-pass");
+  const qrContainer = document.getElementById("qrcode");
 
+  // Sync Input Display Initial
+  ssidInput.value = DEFAULT_SSID;
+  passInput.value = DEFAULT_PASS;
 
+  // QR Code Instance
+  let qrcode = new QRCode(qrContainer, { width: 120, height: 120 });
 
-document.getElementById("login")
-.addEventListener("submit",function(e){
+  function generateQRCode() {
+    const qrData = `WIFI:S:${DEFAULT_SSID};T:WPA;P:${DEFAULT_PASS};;`;
+    qrcode.clear();
+    qrcode.makeCode(qrData);
+  }
 
+  function copyPassword() {
+    navigator.clipboard.writeText(DEFAULT_PASS);
+    alert(`Password "${DEFAULT_PASS}" berhasil disalin!`);
+  }
 
-e.preventDefault();
+  // Helper Enkripsi SHA-256 Standar (Murni)
+  async function hashSHA256(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
 
+  // Login Handler User
+  async function handleLogin(event) {
+    event.preventDefault();
+    const rawPass = document.getElementById("password").value;
+    const encryptedPassword = await hashSHA256(rawPass);
 
-let pass=document.getElementById("pass").value;
+    // Cocokkan Hash Password Login
+    if (encryptedPassword === USER_HASH_TARGET) {
+      generateQRCode();
+      pageLogin.classList.add("hidden");
+      pageWifi.classList.remove("hidden");
+    } else {
+      alert("Password Access Salah / Tidak Valid!");
+    }
+  }
 
+  // Logout Handler
+  function handleLogout() {
+    document.getElementById("password").value = "";
+    pageWifi.classList.add("hidden");
+    pageLogin.classList.remove("hidden");
+  }
 
-if(pass===passwordWiFi){
+  // ================= ADMIN CONFIG LOGIC =================
 
+  function openAdminAuthModal() {
+    document.getElementById("admin-pass").value = "";
+    document.getElementById("modal-admin-auth").classList.remove("hidden");
+  }
 
-document.querySelector("button").innerHTML=
-"Menghubungkan...";
+  function closeModal(modalId) {
+    document.getElementById(modalId).classList.add("hidden");
+  }
 
+  // Verifikasi Password Admin
+  async function verifyAdminPassword() {
+    const inputPass = document.getElementById("admin-pass").value;
+    const hashedInput = await hashSHA256(inputPass);
 
-setTimeout(()=>{
+    if (hashedInput === ADMIN_HASH_TARGET) {
+      closeModal("modal-admin-auth");
+      
+      document.getElementById("edit-ssid").value = DEFAULT_SSID;
+      document.getElementById("edit-pass").value = DEFAULT_PASS;
+      
+      document.getElementById("modal-admin-config").classList.remove("hidden");
+    } else {
+      alert("Password Admin Salah / Akses Ditolak!");
+    }
+  }
 
-window.location="https://azizuser.github.io/bash-host/";
+  // Simpan Perubahan Wi-Fi
+  function saveWifiConfig() {
+    const newSSID = document.getElementById("edit-ssid").value.trim();
+    const newPass = document.getElementById("edit-pass").value.trim();
 
-},1500);
+    if (!newSSID || !newPass) {
+      alert("SSID dan Password tidak boleh kosong!");
+      return;
+    }
 
+    DEFAULT_SSID = newSSID;
+    DEFAULT_PASS = newPass;
 
+    ssidInput.value = DEFAULT_SSID;
+    passInput.value = DEFAULT_PASS;
 
-}else{
-
-
-let error=document.getElementById("error");
-
-error.style.display="block";
-
-
-document.getElementById("pass").value="";
-
-
-}
-
-
-
-});
-
-
-
-
-// 3D MACOS EFFECT
-
-
-const card=document.querySelector(".card");
-
-
-document.addEventListener("mousemove",function(e){
-
-
-let x=(window.innerWidth/2-e.clientX)/30;
-
-let y=(window.innerHeight/2-e.clientY)/30;
-
-
-card.style.transform=
-`
-perspective(900px)
-rotateX(${y}deg)
-rotateY(${x}deg)
-`;
-
-
-
-});
-
-
-
-document.addEventListener("mouseleave",()=>{
-
-
-card.style.transform=
-"rotateX(0) rotateY(0)";
-
-
-});
-
-
-
+    closeModal("modal-admin-config");
+    alert("Konfigurasi Wi-Fi Berhasil Diperbarui!");
+  }
 </script>
-
 
 </body>
 </html>
