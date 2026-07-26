@@ -3,84 +3,96 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cyber Mono Glass Portal</title>
+  <title>Ultra Monochrome Animated Portal</title>
   <!-- QR Code Library CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; }
 
-    /* Animated Background Gelombang Monokrom */
     body {
       background: #050507;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(255, 255, 255, 0.08) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(120, 120, 120, 0.05) 0px, transparent 50%);
-      background-size: 180% 180%;
-      animation: ambientBg 12s ease infinite alternate;
-      color: #f1f5f9;
+      color: #f8fafc;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 20px;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
     }
 
-    @keyframes ambientBg {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
+    /* Animasi Mesh Ambient Liquid Monokrom */
+    body::before, body::after {
+      content: '';
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+      opacity: 0.25;
+      animation: floatBg 12s infinite alternate ease-in-out;
     }
 
-    /* Card Glassmorphism Utama + Floating & Shimmer Effect */
+    body::before {
+      background: #ffffff;
+      top: -50px;
+      left: -50px;
+    }
+
+    body::after {
+      background: #808080;
+      bottom: -50px;
+      right: -50px;
+      animation-delay: -6s;
+    }
+
+    @keyframes floatBg {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(60px, 80px) scale(1.2); }
+    }
+
+    /* Card Glassmorphism Monokrom dengan Animasi Glass & Shimmer */
     .glass-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: rgba(18, 18, 22, 0.45);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 28px;
       padding: 36px 30px;
       width: 100%;
       max-width: 400px;
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 
-                  inset 0 1px 0 rgba(255, 255, 255, 0.25);
+                  inset 0 1px 1px rgba(255, 255, 255, 0.25);
       text-align: center;
       position: relative;
-      animation: floatCard 6s ease-in-out infinite alternate;
+      z-index: 10;
       overflow: hidden;
+      animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Efek Kilatan Cahaya Menerobos Card (Light Sweep) */
+    /* Shimmer Effect pada Pinggiran Kartu */
     .glass-card::before {
       content: '';
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(
-        45deg,
-        transparent 45%,
-        rgba(255, 255, 255, 0.08) 50%,
-        transparent 55%
-      );
-      transform: rotate(30deg);
-      animation: lightSweep 7s infinite;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      animation: shimmer 6s infinite;
       pointer-events: none;
     }
 
-    @keyframes floatCard {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-8px); }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      30%, 100% { left: 200%; }
     }
 
-    @keyframes lightSweep {
-      0% { transform: translateX(-100%) rotate(30deg); }
-      20%, 100% { transform: translateX(100%) rotate(30deg); }
+    @keyframes cardAppear {
+      0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Tombol Lingkaran Sinyal Monokrom (Pulsating Glow) */
+    /* Tombol Lingkaran Sinyal Melayang & Pendar Perak */
     .btn-signal-admin {
       position: absolute;
       top: 20px;
@@ -88,36 +100,35 @@
       width: 42px;
       height: 42px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
       display: flex;
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-      animation: pulseGlow 2.5s infinite;
-      z-index: 10;
-    }
-
-    @keyframes pulseGlow {
-      0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-      70% { box-shadow: 0 0 0 12px rgba(255, 255, 255, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      transition: all 0.4s ease;
+      animation: signalPulse 3s infinite ease-in-out;
     }
 
     .btn-signal-admin:hover {
-      transform: scale(1.15) rotate(15deg);
-      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.15) rotate(5deg);
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
       border-color: #ffffff;
     }
 
     .btn-signal-admin svg {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       fill: #ffffff;
       filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    }
+
+    @keyframes signalPulse {
+      0%, 100% { transform: translateY(0); box-shadow: 0 0 12px rgba(255, 255, 255, 0.1); }
+      50% { transform: translateY(-3px); box-shadow: 0 0 22px rgba(255, 255, 255, 0.25); }
     }
 
     h2 {
@@ -132,7 +143,7 @@
 
     p.subtitle {
       font-size: 0.82rem;
-      color: #888899;
+      color: #8e8e93;
       margin-bottom: 24px;
     }
 
@@ -153,69 +164,63 @@
       width: 100%;
       padding: 12px 16px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.04);
       color: #fff;
       outline: none;
       font-size: 0.9rem;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
     }
 
     input[readonly] {
       background: rgba(255, 255, 255, 0.02);
-      color: #888899;
-      border-color: rgba(255, 255, 255, 0.06);
+      color: #a1a1aa;
+      border-color: rgba(255, 255, 255, 0.05);
       cursor: not-allowed;
     }
 
     input:focus:not([readonly]) {
       border-color: #ffffff;
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
-      transform: translateY(-1px);
+      background: rgba(255, 255, 255, 0.09);
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.2);
     }
 
     .wifi-config {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       padding: 18px;
       border-radius: 18px;
       margin-bottom: 20px;
       text-align: left;
     }
 
-    /* QR Container dengan Efek Hover Glowing */
     .qr-container {
       background: #ffffff;
       padding: 14px;
       border-radius: 20px;
       display: inline-block;
-      margin: 8px 0 6px 0;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-      transition: all 0.3s ease;
+      margin: 8px 0;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease;
     }
-    .qr-container:hover {
-      transform: scale(1.03);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
-    }
+    .qr-container:hover { transform: scale(1.03); }
     #qrcode img { margin: 0 auto; }
 
-    /* Buttons Style */
     .btn-copy {
-      background: #ffffff;
-      color: #050507;
+      background: linear-gradient(135deg, #ffffff, #d4d4d8);
+      color: #09090b;
       border: none;
-      padding: 0 18px;
+      padding: 0 16px;
       border-radius: 12px;
       font-size: 0.8rem;
-      font-weight: 800;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.3s ease;
       white-space: nowrap;
     }
     .btn-copy:hover {
-      box-shadow: 0 0 18px rgba(255, 255, 255, 0.6);
-      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+      transform: translateY(-1px);
     }
 
     .btn {
@@ -223,38 +228,49 @@
       padding: 13px;
       border-radius: 14px;
       border: none;
-      font-weight: 800;
+      font-weight: 700;
       font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       margin-top: 10px;
-      letter-spacing: 0.8px;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
     }
 
+    /* Tombol Utama Metallic Monokrom Glow */
     .btn-login {
       background: linear-gradient(135deg, #ffffff, #a1a1aa);
       color: #050507;
       box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
     }
     .btn-login:hover {
-      background: linear-gradient(135deg, #ffffff, #ffffff);
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
       transform: translateY(-2px);
     }
 
     .btn-logout {
-      background: rgba(255, 255, 255, 0.06);
-      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.05);
+      color: #f4f4f5;
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .btn-logout:hover {
       background: rgba(255, 255, 255, 0.15);
       border-color: #ffffff;
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
+      transform: translateY(-1px);
     }
 
-    /* Pop-Up Modal Styling */
+    /* Transisi Mulus Antar Halaman */
+    .page-view {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Modal Pop-Up Monokrom Animasi */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -268,37 +284,38 @@
       animation: fadeIn 0.3s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
     .modal-card {
-      background: #0a0a0e;
+      background: #0d0d11;
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 24px;
       padding: 28px;
       width: 100%;
-      max-width: 360px;
+      max-width: 350px;
       box-shadow: 0 0 40px rgba(255, 255, 255, 0.15);
       text-align: center;
+      animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes modalPop {
+      0% { opacity: 0; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     .btn-cancel {
       background: rgba(255,255,255,0.05);
-      color: #888899;
+      color: #71717a;
       border: none;
-      padding: 11px;
-      border-radius: 12px;
+      padding: 10px;
+      border-radius: 10px;
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
       cursor: pointer;
-      font-weight: 700;
+      font-weight: 600;
       transition: all 0.2s ease;
     }
     .btn-cancel:hover {
-      color: #ffffff;
-      background: rgba(255,255,255,0.12);
+      color: #e4e4e7;
+      background: rgba(255,255,255,0.1);
     }
 
     .hidden { display: none !important; }
@@ -309,15 +326,15 @@
 <div class="glass-card">
 
   <!-- ================= HALAMAN 1: LOGIN ================= -->
-  <div id="page-login">
-    <!-- Tombol Sinyal Admin (Pulsating Cyber Glow) -->
+  <div id="page-login" class="page-view">
+    <!-- Tombol Sinyal Admin Floating -->
     <button class="btn-signal-admin" onclick="openAdminAuthModal()" title="Pengaturan Admin Wi-Fi">
       <svg viewBox="0 0 24 24">
         <path d="M12 3C7.03 3 2.73 5.11 0 8.42L12 21 24 8.42C21.27 5.11 16.97 3 12 3zm0 4.5c3.27 0 6.22 1.25 8.42 3.29L12 19.33 3.58 10.79C5.78 8.75 8.73 7.5 12 7.5z"/>
       </svg>
     </button>
 
-    <h2 style="margin-top: 18px;">🔑 Access Code WI-FI</h2>
+    <h2 style="margin-top: 15px;">🔑 Access Code</h2>
     <p class="subtitle">Masukkan password untuk membuka akses Wi-Fi</p>
 
     <form id="login-form" onsubmit="handleLogin(event)">
@@ -331,7 +348,7 @@
 
 
   <!-- ================= HALAMAN 2: DASHBOARD WI-FI ================= -->
-  <div id="page-wifi" class="hidden">
+  <div id="page-wifi" class="page-view hidden">
     <h2>⚡ Akses Informasi Wi-Fi</h2>
     <p class="subtitle">Pindai QR atau salin password di bawah ini</p>
 
@@ -352,7 +369,7 @@
     <div class="qr-container">
       <div id="qrcode"></div>
     </div>
-    <p style="font-size: 0.73rem; color: #888899; margin-top: 8px; margin-bottom: 14px;">
+    <p style="font-size: 0.73rem; color: #71717a; margin-top: 6px; margin-bottom: 12px;">
       Scan QR code dengan HP untuk langsung terkoneksi
     </p>
 
@@ -366,7 +383,7 @@
 <div id="modal-admin-auth" class="modal-overlay hidden">
   <div class="modal-card">
     <h3 style="color: #ffffff; margin-bottom: 8px;">⚙️ Verifikasi Admin</h3>
-    <p style="font-size: 0.78rem; color: #888899; margin-bottom: 18px;">Masukkan Password Admin untuk membuka panel pengaturan</p>
+    <p style="font-size: 0.78rem; color: #71717a; margin-bottom: 16px;">Masukkan Password Admin untuk membuka panel pengaturan</p>
     
     <div class="config-group">
       <label for="admin-pass">Password Admin</label>
@@ -383,7 +400,7 @@
 <div id="modal-admin-config" class="modal-overlay hidden">
   <div class="modal-card">
     <h3 style="color: #ffffff; margin-bottom: 8px;">📶 Edit Wi-Fi Realtime</h3>
-    <p style="font-size: 0.78rem; color: #888899; margin-bottom: 18px;">Ubah SSID dan Password Wi-Fi utama</p>
+    <p style="font-size: 0.78rem; color: #71717a; margin-bottom: 16px;">Ubah SSID dan Password Wi-Fi utama</p>
     
     <div class="config-group">
       <label for="edit-ssid">SSID Baru</label>
@@ -402,13 +419,13 @@
 
 <script>
   // DEFAULT WI-FI CONFIG
-  let DEFAULT_SSID = "CYBER_MONO_GLASS";
+  let DEFAULT_SSID = "WIFI_MONO_ANIMATED";
   let DEFAULT_PASS = "kopi1234";
 
-  // HASH USER LOGIN BARU (9ec760822d2f4539f356987a7646fd6033f172f77bdcfde25734a00d73fd7e91)
-  const USER_HASH_TARGET = "9ec760822d2f4539f356987a7646fd6033f172f77bdcfde25734a00d73fd7e91";
+  // HASH LOGIN USER BARU (69efddd606e67884eb67c11403330a0bf69d1af9cb7f8e90403be73cdfd46387)
+  const USER_HASH_TARGET = "69efddd606e67884eb67c11403330a0bf69d1af9cb7f8e90403be73cdfd46387";
 
-  // HASH ADMIN TETAP (2d7532e279254ca6bf0cd7954e1baf659975803338dfbc9d31058d5e8009f7ea)
+  // HASH ADMIN (2d7532e279254ca6bf0cd7954e1baf659975803338dfbc9d31058d5e8009f7ea)
   const ADMIN_HASH_TARGET = "2d7532e279254ca6bf0cd7954e1baf659975803338dfbc9d31058d5e8009f7ea";
 
   // DOM Elements
@@ -418,7 +435,7 @@
   const passInput = document.getElementById("wifi-pass");
   const qrContainer = document.getElementById("qrcode");
 
-  // Sync Input Initial Value
+  // Sync Input Display Initial
   ssidInput.value = DEFAULT_SSID;
   passInput.value = DEFAULT_PASS;
 
@@ -436,7 +453,7 @@
     alert(`Password "${DEFAULT_PASS}" berhasil disalin!`);
   }
 
-  // Enkripsi SHA-256 Standar
+  // Helper Enkripsi SHA-256 Standar (Murni)
   async function hashSHA256(str) {
     const encoder = new TextEncoder();
     const data = encoder.encode(str);
@@ -467,7 +484,7 @@
     pageLogin.classList.remove("hidden");
   }
 
-  // ================= ADMIN LOGIC =================
+  // ================= ADMIN CONFIG LOGIC =================
 
   function openAdminAuthModal() {
     document.getElementById("admin-pass").value = "";
@@ -478,6 +495,7 @@
     document.getElementById(modalId).classList.add("hidden");
   }
 
+  // Verifikasi Password Admin
   async function verifyAdminPassword() {
     const inputPass = document.getElementById("admin-pass").value;
     const hashedInput = await hashSHA256(inputPass);
@@ -494,6 +512,7 @@
     }
   }
 
+  // Simpan Perubahan Wi-Fi
   function saveWifiConfig() {
     const newSSID = document.getElementById("edit-ssid").value.trim();
     const newPass = document.getElementById("edit-pass").value.trim();
